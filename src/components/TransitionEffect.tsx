@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-type Props = {
+interface Props {
   name: string;
-};
+}
 
 const TransitionEffect = (props: Props) => {
   const [isVisible, setIsVisible] = useState(true);
@@ -14,7 +14,7 @@ const TransitionEffect = (props: Props) => {
   //     setWelcome(welcome + 1);
   //   } while (welcome === 5);
   // }, [200]);
-  
+
   return (
     <>
       <motion.div

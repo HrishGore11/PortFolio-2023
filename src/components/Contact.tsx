@@ -1,5 +1,5 @@
 import Link from "next/link";
-import React, { useEffect } from "react";
+import React, { ReactNode, useEffect } from "react";
 import { CustomLink } from "./Header";
 import { PhoneIcon, MapPinIcon, EnvelopeIcon } from "@heroicons/react/24/solid";
 import { motion, useScroll, useTransform } from "framer-motion";
@@ -14,7 +14,7 @@ type Inputs = {
   message: string;
 };
 
-const Contact = (props: Props) => {
+const Contact: ReactNode = (props: Props) => {
   const {
     register,
     handleSubmit,

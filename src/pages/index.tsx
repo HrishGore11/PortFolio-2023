@@ -8,9 +8,41 @@ import Skills from "@/components/Skills";
 import About from "@/components/About";
 import { useState } from "react";
 import TransitionEffect from "@/components/TransitionEffect";
-const inter = Inter({ subsets: ["latin"] });
+import { Props } from "next/script";
+import { PageInfo } from "next/dist/build/utils";
+import {
+  Experience,
+  PersonalInfo,
+  Project,
+  Skill,
+  Social,
+} from "../../typings";
+import fetchPersonalInfo from "@/utils/fetchPersonalInfo";
+import fetchProjects from "@/utils/fetchProjects";
+import fetchExperience from "@/utils/fetchExperience";
+import fetchSocials from "@/utils/fetchSocials";
+import fetchSkills from "@/utils/fetchSkills";
 
-export default function Home() {
+interface Home {
+  personalInfo: PersonalInfo[];
+  projects: Project[];
+  experience: Experience[];
+  skills: Skill[];
+  socials: Social[];
+}
+
+export default function Home({
+  personalInfo,
+  projects,
+  experience,
+  skills,
+  socials,
+}: Home) {
+  console.log("🚀 ~ file: index.tsx:41 ~ socials:", socials);
+  console.log("🚀 ~ file: index.tsx:41 ~ skills:", skills);
+  console.log("🚀 ~ file: index.tsx:41 ~ projects:", projects);
+  console.log("🚀 ~ file: index.tsx:41 ~ personalInfo:", personalInfo);
+  console.log("🚀 ~ file: index.tsx:41 ~ experience:", experience);
   const [welcome, setWelcome] = useState(0);
 
   if (welcome < 6) {
@@ -24,13 +56,14 @@ export default function Home() {
     "ਸਤਿ ਸ਼੍ਰੀ ਅਕਾਲ",
     "নমস্কার",
     "வணக்கம்",
-    "Patience is the key",
+    "Consistency is the key",
   ];
   return (
-    <div className=" h-screen w-full overflow-y-scroll snap-y snap-proximity z-0 overflow-x-hidden scrollbar scrollbar-track-[#1c1d20] scrollbar-thumb-[#5abbc1]/80 scrollbar-thin">
+    // <div className=" h-screen w-full overflow-y-scroll snap-y snap-proximity z-0 overflow-x-hidden scrollbar scrollbar-track-[#1c1d20] scrollbar-thumb-[#5abbc1]/80 scrollbar-thin">
+    <>
       <TransitionEffect name={language[welcome]} />
       <section id="Header" className=" snap-start">
-        <Header />
+        <Header socials={socials} />
       </section>
       {/* <div>Hello</div> */}
       <section id="About" className="snap-start">
@@ -38,7 +71,7 @@ export default function Home() {
       </section>
 
       <section id="Skills" className="snap-none">
-        <Skills />
+        <Skills skills={skills} />
       </section>
 
       <section id="Projects" className=" snap-start">
@@ -48,24 +81,25 @@ export default function Home() {
       <section id="Contact" className=" snap-start">
         <Contact />
       </section>
-
-      {/* <div style={{ overflow: "hidden", whiteSpace: "nowrap" }}> */}
-      {/* <motion.div
-          className="w-full"
-          animate={{ x: ["-25%", "-125%"] }}
-          transition={{ duration: 50, repeat: Infinity }}
-          style={{ display: "inline-block" }}
-        >
-          Hrishikesh Gore
-        </motion.div> */}
-      {/* <motion.div
-          animate={{ x: ["0%", "-100%"] }}
-          transition={{ duration: 5, repeat: Infinity }}
-          style={{ display: "inline-block" }}
-        >
-          Hrishikesh Gore
-        </motion.div> */}
       {/* </div> */}
-    </div>
+    </>
   );
 }
+
+export const getStaticProps = async () => {
+  const personalInfo: PersonalInfo[] = await fetchPersonalInfo();
+  const projects: Project[] = await fetchProjects();
+  const experience: Experience[] = await fetchExperience();
+  const skills: Skill[] = await fetchSkills();
+  const socials: Social[] = await fetchSocials();
+  return {
+    props: {
+      personalInfo,
+      projects,
+      experience,
+      skills,
+      socials,
+    },
+    revalidate: 100,
+  };
+};
